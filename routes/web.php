@@ -1,6 +1,7 @@
 <?php
 
     use App\Http\Controllers\SiteController;
+    use App\Models\Category;
     use App\Models\Product;
     use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,30 @@
 */
 
 Route::get('/', function () {
+
+    // Add 2 entries to Category DB
+
+    // Using new object
+    $category = new Category();
+    $category->name = 'Laptops';
+    $category->save();
+
+    // Using create()
+    $data = [
+        'name' => 'Phones',
+        'status' => 0,
+    ];
+    $category = Category::create($data);
+
+    // check that entries were added to DB
+    // $show_category = Category::all();
+    // dd($show_category);
+
     return view('main');
+});
+
+Route::get('/product', function () {
+    return view('product');
 });
 
 Route::get('/store', function () {
