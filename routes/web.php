@@ -31,7 +31,6 @@ Route::get('/', function () {
         'status' => 0,
     ];
     $category = Category::create($data);
-    $category->save();
 
     // check that entries were added to DB
     // $show_category = Category::all();
