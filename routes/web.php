@@ -1,5 +1,7 @@
 <?php
 
+    use App\Http\Controllers\FormController;
+    use App\Http\Controllers\ProductController;
     use App\Http\Controllers\SiteController;
     use App\Models\Category;
     use App\Models\Product;
@@ -43,9 +45,19 @@ Route::get('/product', function () {
     return view('product');
 });
 
-Route::get('/store', function () {
-    return view('store');
-});
+Route::get('/catalog', [ProductController::class, 'catalog'])->name('catalog');
+
+
+Route::get('/show-form', [FormController::class, 'showForm'])
+    ->name('nameShowForm');
+Route::post('/show-form', [FormController::class, 'postForm'])
+    ->name('namePostForm');
+
+Route::get('product/{id}', [ProductController::class, 'index'])->name('showProduct');
+
+// Route::get('check/{id?}', [ProductController::class, 'index'])->name('showProduct');
+
+
 
 
 Route::get('hello', [SiteController::class, 'index']);
