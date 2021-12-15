@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -18,17 +20,16 @@ class ProductController extends Controller
     }
 
     public function catalog() {
-//        $offset = 0;
-//        $products = Product::limit(9)
-//            ->offset($offset)
-//            ->get();
 
         $products = Product::where('status', 1)
-            ->paginate(9);
+            ->simplePaginate(9);
+        $brands = Brand::where('active', 1)->get();
+        $categories = Category::where('status', 1)->get();
 
-//        $products = Product::all();
         return view('product.catalog', [
-            'products' => $products
+            'products' => $products,
+            'brands' => $brands,
+            'categories' => $categories,
         ]);
     }
 }

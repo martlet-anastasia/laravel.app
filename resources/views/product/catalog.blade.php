@@ -35,59 +35,18 @@
                     <h3 class="aside-title">Categories</h3>
                     <div class="checkbox-filter">
 
+                        @foreach($categories as $category)
                         <div class="input-checkbox">
-                            <input type="checkbox" id="category-1">
-                            <label for="category-1">
+                            <input type="checkbox" id="category-{{ $category->id }}">
+                            <label for="category-{{ $category->id }}">
                                 <span></span>
-                                Laptops
-                                <small>(120)</small>
+                                {{ $category->name }}
+                                <small>(<?php echo rand(50, 200)?>)</small>
                             </label>
                         </div>
+                        @endforeach
 
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="category-2">
-                            <label for="category-2">
-                                <span></span>
-                                Smartphones
-                                <small>(740)</small>
-                            </label>
-                        </div>
 
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="category-3">
-                            <label for="category-3">
-                                <span></span>
-                                Cameras
-                                <small>(1450)</small>
-                            </label>
-                        </div>
-
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="category-4">
-                            <label for="category-4">
-                                <span></span>
-                                Accessories
-                                <small>(578)</small>
-                            </label>
-                        </div>
-
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="category-5">
-                            <label for="category-5">
-                                <span></span>
-                                Laptops
-                                <small>(120)</small>
-                            </label>
-                        </div>
-
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="category-6">
-                            <label for="category-6">
-                                <span></span>
-                                Smartphones
-                                <small>(740)</small>
-                            </label>
-                        </div>
                     </div>
                 </div>
                 <!-- /aside Widget -->
@@ -116,54 +75,18 @@
                 <div class="aside">
                     <h3 class="aside-title">Brand</h3>
                     <div class="checkbox-filter">
+
+                        @foreach($brands as $brand)
                         <div class="input-checkbox">
-                            <input type="checkbox" id="brand-1">
-                            <label for="brand-1">
+                            <input type="checkbox" id="brand-{{ $brand->id }}">
+                            <label for="brand-{{ $brand->id }}">
                                 <span></span>
-                                SAMSUNG
-                                <small>(578)</small>
+                                {{ $brand->name }}
+                                <small>(<?php echo rand(10,40) ?>)</small>
                             </label>
                         </div>
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="brand-2">
-                            <label for="brand-2">
-                                <span></span>
-                                LG
-                                <small>(125)</small>
-                            </label>
-                        </div>
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="brand-3">
-                            <label for="brand-3">
-                                <span></span>
-                                SONY
-                                <small>(755)</small>
-                            </label>
-                        </div>
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="brand-4">
-                            <label for="brand-4">
-                                <span></span>
-                                SAMSUNG
-                                <small>(578)</small>
-                            </label>
-                        </div>
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="brand-5">
-                            <label for="brand-5">
-                                <span></span>
-                                LG
-                                <small>(125)</small>
-                            </label>
-                        </div>
-                        <div class="input-checkbox">
-                            <input type="checkbox" id="brand-6">
-                            <label for="brand-6">
-                                <span></span>
-                                SONY
-                                <small>(755)</small>
-                            </label>
-                        </div>
+                        @endforeach
+
                     </div>
                 </div>
                 <!-- /aside Widget -->
@@ -282,20 +205,22 @@
                 <!-- /store products -->
 
                 <!-- store bottom filter -->
-                <div class="store-filter clearfix">
-
+                <div class="store-filter clearfix text-right">
+                    {{--
                     <span class="store-qty">
-                        {!! $products->links('') !!}
+                        Showing {{ $products->currentPage()*$products->perPage() }}-{{ $products->total() }} products<
+                        /span>
+                                            --}}
 
-                        Showing {{ $products->currentPage()*$products->perPage() }}-{{ $products->total() }} products</span>
+                        {!! $products->links('vendor.pagination.simple-default') !!}
 
-                    <ul class="store-pagination">
-                        <li class="active">1</li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                    </ul>
+{{--                    <ul class="store-pagination">--}}
+{{--                        <li class="active">1</li>--}}
+{{--                        <li><a href="#">2</a></li>--}}
+{{--                        <li><a href="#">3</a></li>--}}
+{{--                        <li><a href="#">4</a></li>--}}
+{{--                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>--}}
+{{--                    </ul>--}}
                 </div>
                 <!-- /store bottom filter -->
             </div>
