@@ -41,7 +41,7 @@
                             <label for="category-{{ $category->id }}">
                                 <span></span>
                                 {{ $category->name }}
-                                <small>(<?php echo rand(50, 200)?>)</small>
+                                <small>({{ mt_rand(50, 200) }})</small>
                             </label>
                         </div>
                         @endforeach
@@ -82,7 +82,7 @@
                             <label for="brand-{{ $brand->id }}">
                                 <span></span>
                                 {{ $brand->name }}
-                                <small>(<?php echo rand(10,40) ?>)</small>
+                                <small>({{ mt_rand(10,40) }})</small>
                             </label>
                         </div>
                         @endforeach
