@@ -20,26 +20,46 @@
 
 Route::get('/', function () {
 
-    // Add 2 entries to Category DB
+//
+//    // Using new object
+//    $category = new Category();
+//    $category->name = 'Laptops';
+//    $category->save();
+//
+//    // Using create()
+//    $data = [
+//        'name' => 'Phones',
+//        'status' => 0,
+//    ];
+//    $category = Category::create($data);
+//
+//    // check that entries were added to DB
+//    // $show_category = Category::all();
+//    // dd($show_category);    // Add 2 entries to Category DB
 
-    // Using new object
-    $category = new Category();
-    $category->name = 'Laptops';
-    $category->save();
-
-    // Using create()
-    $data = [
-        'name' => 'Phones',
-        'status' => 0,
-    ];
-    $category = Category::create($data);
-
-    // check that entries were added to DB
-    // $show_category = Category::all();
-    // dd($show_category);
 
     return view('main');
 });
+
+
+Route::get('/admin', function () {
+    return view('admin.index');
+});
+
+
+Route::resources([
+    'brand' => \App\Http\Controllers\Admin\BrandControllerr::class,
+    'category' => \App\Http\Controllers\Admin\CategoryControllerr::class,
+    'product' => \App\Http\Controllers\Admin\ProductControllerr::class,
+]);
+
+//Route::resource('brand', \App\Http\Controllers\Admin\BrandControllerr::class)
+//    ->except(['destroy']);
+//Route::resource('brand', \App\Http\Controllers\Admin\BrandControllerr::class)
+//    ->only(['index', 'show']);
+//Route::resource('category', \App\Http\Controllers\Admin\CategoryControllerr::class);
+//Route::resource('product', \App\Http\Controllers\Admin\ProductControllerr::class);
+
 
 Route::get('/product', function () {
     return view('product');
