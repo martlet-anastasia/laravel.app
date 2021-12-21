@@ -47,11 +47,20 @@ Route::get('/admin', function () {
 });
 
 
-Route::resources([
-    'brand' => \App\Http\Controllers\Admin\BrandControllerr::class,
-    'category' => \App\Http\Controllers\Admin\CategoryControllerr::class,
-    'product' => \App\Http\Controllers\Admin\ProductControllerr::class,
-]);
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resources([
+        'brand' => \App\Http\Controllers\Admin\BrandControllerr::class,
+        'category' => \App\Http\Controllers\Admin\CategoryControllerr::class,
+        'product' => \App\Http\Controllers\Admin\ProductControllerr::class,
+    ]);
+
+});
+
+
+Route::get('/show-form', [FormController::class, 'showForm'])
+    ->name('nameShowForm');
+Route::post('/show-form', [FormController::class, 'postForm'])
+    ->name('namePostForm');
 
 //Route::resource('brand', \App\Http\Controllers\Admin\BrandControllerr::class)
 //    ->except(['destroy']);

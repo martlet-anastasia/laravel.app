@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateBrandRequest;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 
 class BrandControllerr extends Controller
@@ -14,7 +16,11 @@ class BrandControllerr extends Controller
      */
     public function index()
     {
-        return view('admin.brand.index');
+        $brands = Brand::paginate(5);
+
+        return view('admin.brand.index', [
+            'brands' => $brands
+        ]);
     }
 
     /**
@@ -24,7 +30,8 @@ class BrandControllerr extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.brand.create');
+
     }
 
     /**
@@ -33,9 +40,12 @@ class BrandControllerr extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateBrandRequest $request)
     {
-        //
+        $data = $request->all();
+        $brand = Brand::create($data);
+        return redirect(route('admin.brand.index'));
+
     }
 
     /**
@@ -44,9 +54,10 @@ class BrandControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Brand $brand)
     {
-        //
+        // $brand = Brand::find($id);
+        dd($brand);
     }
 
     /**
@@ -55,9 +66,11 @@ class BrandControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Brand $brand)
     {
-        //
+//      $data = compact('brand', 'ololo'); принимает название переменных и создает ассоциативный массив
+        $data = compact('brand');
+        return view('admin.brand.edit', $data);
     }
 
     /**
@@ -67,9 +80,12 @@ class BrandControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Brand $brand)
     {
-        //
+        $brand->fill($request->all());
+        $brand->save();
+
+        return redirect()->route('admin.brand.index');
     }
 
     /**
@@ -78,8 +94,10 @@ class BrandControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Brand $brand)
     {
-        //
+        $brand->delete();
+        // back();
+        return redirect(route('admin.brand.index'));
     }
 }
