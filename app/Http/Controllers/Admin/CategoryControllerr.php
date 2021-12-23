@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryControllerr extends Controller
@@ -14,7 +16,10 @@ class CategoryControllerr extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::paginate(10);
+        return view('admin.category.index', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -24,7 +29,7 @@ class CategoryControllerr extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.create');
     }
 
     /**
@@ -33,9 +38,11 @@ class CategoryControllerr extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCategoryRequest $request)
     {
-        //
+        $data = $request->all();
+        Category::create($data);
+        return redirect(route('admin.category.index'));
     }
 
     /**
@@ -44,9 +51,11 @@ class CategoryControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        return view('admin.category.show', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -55,9 +64,11 @@ class CategoryControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(CreateCategoryRequest $category)
     {
-        //
+        return view('admin.category.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -67,9 +78,16 @@ class CategoryControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $data = $request->all();
+        if(empty($data['status'])) {
+            $data['status'] = 0;
+        }
+        $category->fill($data);
+        $category->save();
+
+        return redirect()->route('admin.category.index');
     }
 
     /**
@@ -78,8 +96,9 @@ class CategoryControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->forceDelete();
+        return redirect(route('admin.category.index'));
     }
 }
