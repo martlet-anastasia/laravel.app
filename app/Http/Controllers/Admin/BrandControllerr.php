@@ -6,9 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateBrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BrandControllerr extends Controller
 {
+
+//    public function __construct()
+//    {
+//        $this->middleware['auth'];
+//    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,11 +47,22 @@ class BrandControllerr extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateBrandRequest $request)
+    public function store(Request $request)
     {
+        $file = $request->file('logo');
         $data = $request->all();
+        $data['logo'] = $file->store('logo','public');
         $brand = Brand::create($data);
         return redirect(route('admin.brand.index'));
+
+        //dump($file->storeAs('new_folder', 'ghghghgh.png', 'public'));
+
+        //Storage::disk('public')->put('test_upload/123.png', $file->getContent());
+        // Storage::putFileAs('test_upd', $file, 'ggg_disk.png');
+        // dd($file->getContent());
+        // dd($request->allFiles());
+        // dd(Storage::allDirectories());
+        // dd($request->allFiles('logo'));
 
     }
 
@@ -80,7 +98,7 @@ class BrandControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(Brand $brand, Request $request)
     {
         $brand->fill($request->all());
         $brand->save();

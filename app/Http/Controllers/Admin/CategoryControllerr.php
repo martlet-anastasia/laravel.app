@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Models\Category;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 
 class CategoryControllerr extends Controller
@@ -64,7 +65,7 @@ class CategoryControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CreateCategoryRequest $category)
+    public function edit(Category $category)
     {
         return view('admin.category.edit', [
             'category' => $category
@@ -78,7 +79,7 @@ class CategoryControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CreateCategoryRequest $request, Category $category)
     {
         $data = $request->all();
         if(empty($data['status'])) {

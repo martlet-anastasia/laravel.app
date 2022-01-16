@@ -31,7 +31,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
-    protected $fillable = ['name', 'price', 'img', 'status'];
+    protected $fillable = ['name', 'price', 'img', 'status', 'brandID'];
+
+    public function brand() {
+        // return $this->belongsTo(Brand::class, 'brandID', 'id');
+        // return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class)->withDefault([
+            'name' => 'No name',
+            'logo' => 'https://i1.sndcdn.com/avatars-000437845644-c65edy-t500x500.jpg'
+        ]); // in alphabetic order
+    }
 
     use HasFactory;
 }
