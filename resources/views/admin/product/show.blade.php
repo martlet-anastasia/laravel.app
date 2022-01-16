@@ -33,7 +33,11 @@
                 <div class="col-md-5 col-md-push-2">
                     <div id="product-main-img">
                         <div class="product-preview">
-                            <img src="{{ asset($product->img) }}" alt="">
+                            @if (Storage::disk('public')->exists($product->img))
+                                <img src="{{ asset('/storage/'.$product->img) }}" width="120">
+                            @else
+                                <img src="{{ asset($product->img) }}" width="120">
+                            @endif
                         </div>
                     </div>
                 </div>
