@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Brand;
+use App\Http\Requests\CreateProductRequest;
 
 class ProductControllerr extends Controller
 {
@@ -14,7 +16,10 @@ class ProductControllerr extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::paginate(10);
+        return view('admin.product.index', [
+            'products' => $products
+        ]);
     }
 
     /**
@@ -24,7 +29,9 @@ class ProductControllerr extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.product.create', [
+            'brands' => Brand::all()
+        ]);
     }
 
     /**
@@ -33,9 +40,18 @@ class ProductControllerr extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateProductRequest $request)
     {
-        //
+        $data = $request->all();
+        if(!is_null($request->file('img'))) {
+            $path = $request->file('img')->store('public/products/img');
+            $path = str_replace('public/', '', $path);
+        } else {
+            $path = 'https://thumbs.dreamstime.com/b/not-found-icon-design-line-style-perfect-application-web-logo-presentation-template-not-found-icon-design-line-style-169941512.jpg';
+        }
+        $data['img'] = $path;
+        Product::create($data);
+        return redirect(route('admin.product.index'));
     }
 
     /**
@@ -44,9 +60,11 @@ class ProductControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return view('admin.product.show', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -55,9 +73,12 @@ class ProductControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        return view('admin.product.edit', [
+            'product' => $product,
+            'brands' => Brand::all()
+        ]);
     }
 
     /**
@@ -67,9 +88,21 @@ class ProductControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateProductRequest $request, Product $product)
     {
-        //
+        $data = $request->all();
+        if(empty($data['status'])) {
+            $data['status'] = 0;
+        }
+        if(!is_null($request->file('img'))) {
+            $path = $request->file('img')->store('public/products/img');
+            $path = str_replace('public/', '', $path);
+            $data['img'] = $path;
+        }
+        $product->fill($data);
+        $product->save();
+
+        return redirect()->route('admin.product.index');
     }
 
     /**
@@ -78,8 +111,9 @@ class ProductControllerr extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        $product->forceDelete();
+        return redirect(route('admin.product.index'));
     }
 }
