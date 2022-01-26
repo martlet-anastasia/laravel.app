@@ -43,6 +43,8 @@
     });
 
 Route::get('test-el', function () {
+
+    dd(Product::find(1)->brand());
 //    $brand = Brand::find(1);
 //    dump($brand->products()->where('price', '>', 200)->get());
 
