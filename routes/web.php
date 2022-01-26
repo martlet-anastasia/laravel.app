@@ -21,6 +21,27 @@
 |
 */
 
+    Route::get('send-email', function() {
+        return view('form.sendEmailForm');
+    });
+
+    Route::post('message-send', function() {
+        $email = $_REQUEST['email'];
+        \App\Events\WelcomeEvent::dispatch($email);
+        return view('auth.welcome', compact('email'));
+    })->name('welcomeMail');
+
+
+    Route::get('test', function () {
+//        event(new \App\Events\TestEvent(1));
+        $balance = rand(0, 100);
+        dump($balance);
+        if($balance > 50) {
+            \App\Events\BingoEvent::dispatch($balance);
+        }
+
+    });
+
 Route::get('test-el', function () {
 //    $brand = Brand::find(1);
 //    dump($brand->products()->where('price', '>', 200)->get());
