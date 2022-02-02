@@ -32,15 +32,69 @@
     })->name('welcomeMail');
 
 
+    Route::get('test2', function () {
+//        $response = Http::post('https://translation.googleapis.com/language/translate/v2', [
+//            'query' => [
+//                "q" => "The Great Pyramid of Giza (also known as the Pyramid of Khufu or the Pyramid of Cheops) is the oldest and largest of the three pyramids in the Giza pyramid complex.",
+//                "source" => "en",
+//                "target" => "es",
+//                "format" => "text"
+//            ]
+//        ]);
+
+        $response = Http::get('api.openweathermap.org/data/2.5/weather', [
+            'query' => [
+                'q' => 'London',
+                'appid' => '763120c2bd87ded895f42466d8788150',
+                'lang' => 'ru'
+            ]
+        ]);
+        dump($response->object());
+    });
+
     Route::get('test', function () {
-//        event(new \App\Events\TestEvent(1));
-        $balance = rand(0, 100);
-        dump($balance);
-        if($balance > 50) {
-            \App\Events\BingoEvent::dispatch($balance);
-        }
+//        \App\Jobs\BingoJob::dispatch()->onQueue('delay')->delay(now()->addMinutes(1));
+//        \App\Jobs\BingoJob::dispatch()->onQueue('no delay');
+
+//        $client = new \GuzzleHttp\Client([
+//            'base_uri' => 'https://www.nbrb.by'
+//        ]);
+//        $response = $client->get('api/exrates/rates/145', [
+//            'query' => [
+//                'ondate' => '2021-1-1',
+//                'periodicity' => 0
+//            ]
+//        ]);
+//        $curr = json_decode($response->getBody()->getContents());
+//        dump($curr);
+//
+////        $client->post('https://www.nbrb.by/api/exrates/rates/145', [
+////            'formParams' => [
+////                'Cur_ID' => 145,
+////                'Cur_RATE' => 5
+////            ]
+////        ]);
+//
+//        $curr = $client->request('GET', 'https://www.nbrb.by/api/exrates/rates/145',
+//        ['query' => [
+//            'ondate' => '2021-1-1',
+//            'periodicity' => 0
+//        ]]);
+
+        $response = Http::get('https://www.nbrb.by/api/exrates/rates/145?ondate=2016-4-13&periodicity=0');
+        $response = Http::get('https://www.nbrb.by/api/exrates/rates/145', [
+            'query' => [
+                'ondate' => '2020-1-1',
+                'periodicity' => 0
+            ]
+        ]);
+        dump($response->body());
+
+        Http::asForm()->post('', []);
+        Http::asJson()->post('', []);
 
     });
+
 
 Route::get('test-el', function () {
 
