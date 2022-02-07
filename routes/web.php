@@ -24,38 +24,7 @@
     */
 
     Route::get('send-email', function() {
-        // return view('form.sendEmailForm');
-
-        $updates = Telegram::getUpdates();
-        $telegramChatId = null;
-        $userName = "anastasiaxo";
-        foreach ($updates as $update) {
-            $telegramUserName = $update['message']['chat']['username'];
-            if($userName == $telegramUserName) {
-                $telegramChatId = $update['message']['chat']['id'];
-                $response = Telegram::sendMessage([
-                    'chat_id' => $telegramChatId,
-                    'text' => 'Hello World'
-                ]);
-                break;
-            }
-        }
-
-        return dump($response);
-
-
-        $response = Telegram::sendMessage([
-                'chat_id' => "@anastasiaxo",
-                'text' => 'Hello World'
-        ]);
-        return dump($response);
-        $botId = $response->getId();
-        $firstName = $response->getFirstName();
-        $username = $response->getUsername();
-
-        dump($botId);
-        dump($username);
-
+        return view('form.sendEmailForm');
     });
 
     Route::post('message-send', function() {
