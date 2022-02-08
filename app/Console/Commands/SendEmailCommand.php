@@ -2,8 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\CronMail;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class SendEmailCommand extends Command
 {
@@ -12,7 +16,10 @@ class SendEmailCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:test {name*?} {name2=test} {--Q|queue=default}';
+    protected $signature = 'email:send {--email= : Email where to send the message}
+                            {--id= : ID of the user}
+                            {--t|text= : Email text}
+                            {--telegram_username= : Telegram username}';
 
     /**
      * The console command description.
@@ -36,30 +43,54 @@ class SendEmailCommand extends Command
      *
      * @return int
      */
-    public function handle() // здесь идет непосредственное выполнение
+    public function handle()
     {
-//        $this->info('ololo');
-//        $this->info(json_encode($this->argument('name') ?? 'no argument'));
-//        $this->info($this->argument('name2') ?? 'no argument');
-//        $this->info($this->option('queue'));
-//        $this->line($this->option('queue'));
-//        $this->error($this->option('queue'));
+        $email = $this->option('email') ?? null;
+        $id = $this->option('id') ?? null;
+        $text = $this->option('text') ?? 'default';
+        $telegram_username = $this->option('telegram_username') ?? null;
+        $telegramChatId = null;
 
-//        $answer = $this->ask('What do you want?');
-//        $answer = $this->secret('What do you want?');
-//        $answer = $this->confirm('What do you want?');
-//        $answer = $this->confirm('What do you want?', true);
-//        $answer = $this->anticipate('What do you want?', ['bbb', 'xxx', 'zzz']);
-//        $answer = $this->choice('What do you want?', ['gfg', 'yty'], 0);
+        if($id) {
+            try {
+                $email = User::find($id)->email;
+            } catch (\Exception $e) {
+                $this->error('User ID not found');
+                return Command::FAILURE;
+            }
+        }
 
-        $answer = $this->table(
-            ['Name', 'Email'],
-            User::all(['name', 'email'])->toArray()
-        );
+        if($telegram_username) {
+            $updates = Telegram::getUpdates();
+            $userName = $telegram_username;
+            foreach ($updates as $update) {
+                $telegramUserName = $update['message']['chat']['username'];
+                if ($userName == $telegramUserName) {
+                    $telegramChatId = $update['message']['chat']['id'];
+                    break;
+                }
+            }
+        }
 
+        if($id || $email || $telegram_username) {
+            // Send message per email
+            if($id || $email) {
+                Mail::to($email)
+                    ->send(new CronMail($text));
+                $this->info('Message successfully sent by email to '.$email);
+            }
+            // Send message in Telegram
+            if($telegramChatId) {
+                Telegram::sendMessage([
+                    'chat_id' => $telegramChatId,
+                    'text' => $text,
+                ]);
+                $this->info('Message successfully sent in Telegram to '.$telegram_username);
+            }
+        } else {
+            $this->error('email (--email) or user id (--id) or telegram username (--telegram_username) should be passed');
+        }
 
-        $this->info($answer);
-        //        $this->error('hghgh');
         return Command::SUCCESS;
     }
 }
