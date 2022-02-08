@@ -98,6 +98,14 @@
     });
 
 
+Route::get('test-tg', function () {
+    $data = [
+        'chat_id' => '@ololo_prod_limit',
+        'text' => 'hello wwoorrlldd'
+    ];
+    Http::get('https://api.telegram.org/bot2057683665:AAFJsdogd37pJFCMB2rnwjKPrqMUVySqH6E/sendMessage?chat_id=@ololo_prod_limited&text=hahaha');
+});
+
 Route::get('test-el', function () {
 
     dd(Product::find(1)->brand());
@@ -116,6 +124,21 @@ Route::get('test-el', function () {
 Route::get('cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart');
 Route::post('add-to-cart', [\App\Http\Controllers\CartController::class, 'addToCart'])->name('addToCart');
 
+
+Route::get('auth', function () {
+    $resp = Http::post('http://olol/auth/api', [
+        'pass' => 'jdhjhd',
+        'email' => 'dlfjkdj'
+    ]);
+
+    //($resp->body())->accessToken;
+
+    Http::withHeaders([
+        'Authorization' => 'Baerer '.($resp->body())->accessToken
+    ])->post('protected_url');
+
+
+});
 
 Route::get('/', function () {
 
